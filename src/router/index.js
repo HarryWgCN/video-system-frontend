@@ -17,22 +17,22 @@ export default new Router({
     //   component: Main
     //   // redirect: '/video'
     // },
+    // {
+    //   path: '/video',
+    //   name: 'Video',
+    //   component: {render: (e) => e('router-view')},
+    //   children: [
     {
-      path: '/video',
-      name: 'Video',
-      component: {render: (e) => e('router-view')},
-      children: [
-        {
-          path: 'relations',
-          name: 'Relations',
-          component: Relations
-        },
-        {
-          path: 'description',
-          name: 'Description',
-          component: Description
-        }
-      ]
+      path: '/relations',
+      name: 'Relations',
+      component: Relations
+    },
+    {
+      path: '/description',
+      name: 'Description',
+      component: Description
     }
+    //   ]
+    // }
   ]
 })

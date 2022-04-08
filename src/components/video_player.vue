@@ -110,7 +110,7 @@ export default {
         html5: {hls: {withCreadentials: false}}, // 可以播放m3u8视频
         sources: [{
           type: 'video/' + this.fileType,
-          src: require('../assets/01.mp4') // 视频url地址
+          src: require('../assets/wulin.mp4') // 视频url地址
         }],
         poster: this.posterUrl, // 封面地址
         width: '100%',
@@ -130,7 +130,7 @@ export default {
 <style scoped lang="less">
   .my_video{
     width: 100%;
-    height: calc(100vh - 100px);
+    height: calc(100vh);
     background-color: white;
   }
   .video-js .vjs-big-play-button{

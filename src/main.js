@@ -6,7 +6,9 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import VideoPlayer from 'vue-video-player'
+import * as echarts from 'echarts'
 
+Vue.prototype.$echarts = echarts
 require('video.js/dist/video-js.css')
 require('vue-video-player/src/custom-theme.css')
 
@@ -17,8 +19,6 @@ Vue.use(ElementUI)
 
 // eslint-disable-next-line no-new
 new Vue({
-  el: '#app',
   router,
-  components: { App },
-  template: '<App/>'
-})
+  render: h => h(App)
+}).$mount('#app')

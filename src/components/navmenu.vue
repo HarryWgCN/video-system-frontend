@@ -10,9 +10,9 @@
       active-text-color="#ffd04b"
       router
     >
-      <el-menu-item index="/video/description">视频信息</el-menu-item>
+      <el-menu-item index="/description">视频信息</el-menu-item>
       <el-submenu index="2">
-        <template slot="title">视频详细信息</template>
+        <template slot="title">视频处理信息</template>
         <el-menu-item index="2-1">视频内容</el-menu-item>
         <el-menu-item index="2-2">视频人物</el-menu-item>
         <el-menu-item index="2-3">人物特征</el-menu-item>
@@ -23,10 +23,10 @@
           <el-menu-item index="2-4-3">选项3</el-menu-item>
         </el-submenu>
       </el-submenu>
-      <el-menu-item index="/video/relations" >人物关系网络</el-menu-item>
-      <el-menu-item index="4"
-        ><a href="https://www.bupt.edu.cn/" target="_blank">关于我们</a></el-menu-item
-      >
+      <el-menu-item index="/relations" >人物关系网络</el-menu-item>
+      <el-menu-item index="4">
+        <a href="https://www.bupt.edu.cn/" target="_blank" style='text-decoration:none;'>关于我们</a>
+      </el-menu-item>
     </el-menu>
     <el-main>
       <router-view></router-view>

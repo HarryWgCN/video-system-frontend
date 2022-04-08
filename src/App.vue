@@ -5,15 +5,8 @@
         <el-col :span="12" class="lightgreen-box"><VideoPlayer></VideoPlayer></el-col>
         <el-col :span="12" class="orange-box">
           <el-row><Navmenu></Navmenu></el-row>
-          <!-- <el-row><InfoShow></InfoShow></el-row> -->
         </el-col>
       </el-row>
-      <!-- <el-container>
-        <el-main>
-          <router-view ></router-view>
-        </el-main>
-      </el-container> -->
-    <!-- </el-container> -->
   </div>
 </template>
 
