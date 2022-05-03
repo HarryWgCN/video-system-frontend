@@ -18,14 +18,14 @@ export default {
     }
   },
   props: {
-    videoName: {
-      type: String,
+    processId: {
+      type: Number,
       required: true // 缺失，控制台报错
     }
   },
   watch: {
-    videoName: function () {
-      console.log('videoName changed')
+    processId: function () {
+      console.log('processId changed')
       this.forMounted()
     }
   },
@@ -37,38 +37,17 @@ export default {
       var this_ = this
       this_.loading = true
       this.srcs = []
-      this_.$axios.get('/ls', {
-        params: {
-          dirPath: '/2020110710/video_system/' + this_.videoName + '/process_results/process/for_frontend/face_feature'
+      this_.$axios.get('/video/' + this_.processId + '/face_feature', {responseType: 'json'}).then(function (response) {
+        if (response.data.code === '404') {
+          return
         }
-      }).then(function (response) {
-        let asyncFun = []
         for (var element of response.data.data) {
-          asyncFun.push(this_.getSingleFeature(element))
+          var temp = 'data:image/jpg;base64,' + element
+          this_.srcs.push(temp)
         }
-        Promise.all(asyncFun).then(() => {
-          console.log('complete')
-          this_.loading = false
-        })
+        this_.loading = false
       }).catch(function (error) {
         console.log(error)
-      })
-    },
-    getSingleFeature: function (element) {
-      var this_ = this
-      return new Promise((resolve, reject) => {
-        this_.$axios.get('/file', {
-          params: {
-            filePath: '/2020110710/video_system/' + this_.videoName + '/process_results/process/for_frontend/face_feature/' + element.name
-          },
-          responseType: 'arraybuffer'
-        }).then(function (response) {
-          this_.srcs.push('data:image/jpg;base64,' + btoa(new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), '')))
-          console.log('got feature')
-          resolve()
-        }).catch(function (error) {
-          console.log(error)
-        })
       })
     }
   }

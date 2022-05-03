@@ -3,11 +3,11 @@
     <el-row>
       <el-col :span="12" class="lightgreen-box">
         <el-row>
-          <VideoPlayer @video-change-event='videoChange'></VideoPlayer>
+          <VideoPlayer @process-change-event='processChange' @video-seconds-change-event='videoSecondsChange'></VideoPlayer>
         </el-row>
       </el-col>
       <el-col :span="12" class="orange-box">
-        <el-row><Navmenu ref='navmenu' :videoNameData='videoName'></Navmenu></el-row>
+        <el-row><Navmenu :processId='processId' :videoSeconds='videoSeconds'></Navmenu></el-row>
       </el-col>
     </el-row>
   </div>
@@ -15,20 +15,24 @@
 
 <script>
 import Navmenu from '@/components/navmenu.vue'
-import VideoPlayer from '@/components/video_player.vue'
+import VideoPlayer from '@/components/videoPlayer.vue'
 export default {
   name: 'App',
   components: {Navmenu, VideoPlayer},
   data () {
     return {
-      videoName: 'harry'
+      processId: 0,
+      videoSeconds: 0
     }
   },
   methods: {
-    videoChange: function (event) {
-      console.log(this)
+    processChange: function (event) {
       console.log('App caught video name change')
-      this.videoName = event
+      this.processId = event.id
+    },
+    videoSecondsChange: function (event) {
+      console.log('App caught video seconds change')
+      this.videoSeconds = event
     }
   }
 }

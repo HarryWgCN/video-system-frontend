@@ -1,6 +1,6 @@
 <template>
   <div class="my_video">
-    <DropDown @video-change-event='videoChange'></DropDown>
+    <DropDown @process-change-event='processChange'></DropDown>
     <video-player  class="video-player vjs-custom-skin"
                    ref="videoPlayer"
                    :playsinline="true"
@@ -20,22 +20,26 @@
     <div id='uploader'>
     <Uploader></Uploader>
     </div>
+    <div id='submit_process'>
+      <SubmitProcess></SubmitProcess>
+    </div>
   </div>
 </template>
 
 <script>
 // 导入组件
 import {videoPlayer} from 'vue-video-player'
-import Uploader from '@/components/Uploader.vue'
-import DropDown from '@/components/DropDown.vue'
+import Uploader from '@/components/videoProcess/Uploader.vue'
+import DropDown from '@/components/videoProcess/DropDown.vue'
+import SubmitProcess from '@/components/videoProcess/SubmitProcess.vue'
 export default {
   name: 'VideoPlayer',
   components: {
-    videoPlayer, Uploader, DropDown
+    videoPlayer, Uploader, DropDown, SubmitProcess
   },
   data () {
     return {
-      videoName: 'yeqiudi', // 具体视频
+      selectProcess: 'yeqiudi', // 具体视频
       fileType: 'mp4', // 资源的类型
       videoUrl: '', // 资源的路径地址
       posterUrl: '' // 封面地址
@@ -45,10 +49,10 @@ export default {
 
   },
   methods: {
-    videoChange: function (videoName) {
-      console.log('video_player caught video name change')
-      this.videoName = videoName
-      this.$emit('video-change-event', videoName)
+    processChange: function (selectProcess) {
+      console.log('video_player caught process change', selectProcess)
+      this.selectProcess = selectProcess
+      this.$emit('process-change-event', selectProcess)
     },
     // 播放回调
     onPlayerPlay (player) {
@@ -82,7 +86,8 @@ export default {
 
     // 当前播放位置发生变化时触发。
     onPlayerTimeupdate ($event) {
-      // console.log(player)
+      var videoSeconds = $event.cache_.currentTime
+      this.$emit('video-seconds-change-event', videoSeconds)
     },
 
     // 媒体的readyState为HAVE_FUTURE_DATA或更高
@@ -120,7 +125,7 @@ export default {
         html5: {hls: {withCreadentials: false}}, // 可以播放m3u8视频
         sources: [{
           type: 'video/' + this.fileType,
-          src: this.$axios.defaults.baseURL + '/file/video-preview?filePath=/2020110710/video_system/videos/' + this.videoName + '.mp4'// 视频url地址
+          src: this.$axios.defaults.baseURL + '/file/video-preview?filePath=/2020110710/' + this.selectProcess.videoPath // 视频url地址
         }],
         poster: this.posterUrl, // 封面地址
         width: '100%',
@@ -164,5 +169,8 @@ export default {
     color: #8492a6;
     font-size: 14px;
     margin-bottom: 20px;
+  }
+  #submit_process {
+    margin-top: 40px;
   }
 </style>

@@ -13,8 +13,7 @@ Vue.prototype.$echarts = echarts
 require('video.js/dist/video-js.css')
 require('vue-video-player/src/custom-theme.css')
 
-axios.defaults.baseURL = 'http://10.112.207.79:8100/vs-filesystem/'
-// axios.defaults.headers = {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'}
+axios.defaults.baseURL = 'http://10.112.207.79:8100/vs-filesystem'
 
 Vue.prototype.$axios = axios
 

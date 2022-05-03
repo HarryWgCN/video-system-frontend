@@ -12,26 +12,20 @@
       </el-breadcrumb-item>
     </el-breadcrumb>
   </div>
-  <div id='file_dir'>
-    <!-- 简陋版文件展示 -->
-    <!-- <div v-if='show_dir'>
-      <button v-for="(value) in elements" v-bind:class="getClass(value)" v-bind:key="value.name" v-on:click='pressButton(now_path + "/" + value.name, value.dir)'>
-        {{value.name}}
-      </button>
-    </div> -->
-    <div class="video-main" v-if='show_dir' v-loading="loading">
+  <div id='file_dir' v-loading="loading">
+    <div class="video-main" v-if='show_dir'>
       <ul class="list">
         <li
           v-for="(file) in elements"
           :key="file.name"
           :class="{active:file.active}"
           class="list-item"
-          v-on:click='pressButton(file.name, file.dir)'
+          v-on:click='pressButton(file)'
         >
           <div class="inner">
-            <!-- <span v-if='!file.hasOwnProperty(file)' v-bind:class="getClass(file)"></span> -->
+            <span v-if='!file.hasOwnProperty("content")' v-bind:class="getClass(file)"></span>
             <el-image
-              v-if="file.content.length > 0"
+              v-else-if="file.content.length > 0"
               :src= "'data:image/jpg;base64,' + file.content"
               class="icon-thumb"
               fit="contain"
@@ -46,14 +40,14 @@
       </ul>
     </div>
     <div v-else>
-      <img :src="src" alt="" />
+      <img :src="src" alt=""/>
     </div>
   </div>
   <!-- <el-button id='back_button' type="primary" round v-on:click='pressButton(former_path, true)'>返回上层</el-button> -->
 </div>
 </template>
 
-<script>
+<script scoped>
 export default {
   data: function () {
     return {
@@ -61,39 +55,39 @@ export default {
       ], // 目录结构
       show_dir: true, // 是否显示目录结构，false展示文件
       src: null, // 文件连接
-      now_path: ['process_results'], // 当前的路径
-      loading: true
+      now_path: ['object-det'],
+      clip: '', // 当前的路径
+      loading: true,
+      pageSize: 20
     }
   },
   props: {
-    videoName: {
-      type: String,
+    processId: {
+      type: Number,
       required: true // 缺失，控制台报错
     }
   },
   watch: {
-    videoName: function () {
-      console.log('videoName changed')
+    processId: function () {
+      console.log('processId changed')
       this.forMounted()
     }
   },
   mounted: function () {
     this.forMounted()
   },
-  computed: {
-    former_path: function () {
-      return this.now_path.substr(0, this.now_path.lastIndexOf('/'))
-    }
-  },
   methods: {
     forMounted: function () {
       var this_ = this
-      this.$axios.get('/ls-with-content', {
+      this.$axios.get('/video/' + this_.processId + '/ls/object-det', {
         params: {
-          dirPath: '/2020110710/video_system/' + this.videoName + '/' + this_.now_path.join('/')
+          pageSize: this_.pageSize,
+          page: 0,
+          clip: ''
         }
       }).then(function (response) {
-        this_.elements = response.data.data
+        this_.elements = response.data.data.data
+        this_.show_dir = true
         this_.loading = false
       }).catch(function (error) {
         console.log(error)
@@ -103,32 +97,35 @@ export default {
       return value.dir ? 'icon-folder' : 'icon-file'
     },
     backFileFolder: function (index) {
-      this.now_path = this.now_path.slice(0, index + 1)
-      var this_ = this
-      this.loading = true
-      this.$axios.get('/ls-with-content', {
-        params: {
-          dirPath: '/2020110710/video_system/' + this.videoName + '/' + this.now_path.join('/')
-        }
-      }).then(function (response) {
-        this_.elements = response.data.data
-        this_.show_dir = true
-        this_.loading = false
-      }).catch(function (error) {
-        console.log(error)
-      })
+      switch (index) {
+        case 0:
+          this.now_path = this.now_path.slice(0, 1)
+          this.forMounted()
+          break
+        case 1:
+          var name = this.now_path[index]
+          this.now_path = this.now_path.slice(0, 1)
+          this.pressButton({name: name, dir: true})
+          break
+        default :
+          break
+      }
     },
-    pressButton: function (name, isDir) { // 点击按钮请求新的目录结构或请求文件
+    pressButton: function (file) { // 点击按钮请求新的目录结构或请求文件
+      var name = file.name
+      var isDir = file.dir
       this.now_path.push(name)
       var this_ = this
       if (isDir) {
         this_.loading = true
-        this.$axios.get('/ls-with-content', {
+        this_.$axios.get('/video/' + this.processId + '/ls/object-det', {
           params: {
-            dirPath: '/2020110710/video_system/' + this.videoName + '/' + this.now_path.join('/')
+            pageSize: this_.pageSize,
+            page: 0,
+            clip: name
           }
         }).then(function (response) {
-          this_.elements = response.data.data
+          this_.elements = response.data.data.data
           this_.show_dir = true
           this_.loading = false
         }).catch(function (error) {
@@ -136,18 +133,9 @@ export default {
         })
       } else {
         this_.loading = true
-        this.$axios.get('/file', {
-          params: {
-            filePath: '/2020110710/video_system/' + this.videoName + '/' + this.now_path.join('/')
-          },
-          responseType: 'arraybuffer'
-        }).then(function (response) {
-          this_.src = 'data:image/jpg;base64,' + btoa(new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
-          this_.show_dir = false
-          this_.loading = false
-        }).catch(function (error) {
-          console.log(error)
-        })
+        this_.src = 'data:image/jpg;base64,' + file.content
+        this_.show_dir = false
+        this_.loading = false
       }
     }
   }
@@ -205,43 +193,44 @@ img{
   box-sizing: border-box;
   position: relative;
   height: 120px;
-  width: 120px;
+  width: 150px;
   /* background-color: green; */
   margin-top: 20px;
   display: inline-block;
   cursor: pointer;
 }
 .inner {
-  height: 80px;
-  width: 100px;
+  height: 120px;
+  width: 150px;
   margin: 0px auto
 }
 .icon-folder {
   /* 文件夹的样式 */
   display: inline-block;
-  width: 80px;
-  height: 60px;
-  background-image: url(../../assets/svg/folder.svg);
+  width: 120px;
+  height: 90px;
+  background-image: url('../../../assets/svg/folder.svg');
   background-size: 100% 100%;
 }
 .icon-file {
-  /* 文件夹的样式 */
+  /* 文件的样式 */
   display: inline-block;
-  width: 60px;
-  height: 60px;
-  background-image: url(../../assets/svg/file.svg);
+  width: 90px;
+  height: 90px;
+  background-image: url('../../../assets/svg/file.svg');
   background-size: 100% 100%;
 }
 .icon-thumb {
   /* 文件的样式 */
-  width: 100px;
-  height: 80px;
+  width: 150px;
+  height: 120px;
 }
 .file-name {
   /* 文件夹name样式 */
-  margin: 0 auto;
+  margin: 0px auto;
   text-align: center;
   overflow: hidden;
+  width: 150px;
   text-overflow: ellipsis;
   white-space: nowrap;
   color: #424e67;
@@ -251,61 +240,25 @@ img{
   color: #409eff;
 }
 .hover-cover {
-  width: 60px;
-  height: 60px;
+  width: 90px;
+  height: 90px;
   position: absolute;
   left: 10px;
   top: 5px;
   background-color: rgb(0,0,0);
-  opacity: 0;
+  opacity: 0.6;
   text-align: center;
   line-height: 60px;
   font-size: 12px;
 }
 .list-item:hover {
   background-color: #f1f5fa;
-}
-.icon-file-selected {
-  opacity: 0.5;
-}
-.hover-cover {
-  opacity: 0.6;
-}
-.icon-file-selected {
-  /* // 小圆点默认样式 */
-  position: absolute;
-  left: 5px;
-  top: 5px;
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-size: 100% 100%;
-  /* background-image: url(../../assets/svg/icon-file-selected.svg); */
-  opacity: 0;
-}
-.icon-file-selected:hover {
-  /* // 小圆点hover */
-  opacity: 1 !important;
+  width: 150px;
 }
 .active {
   /* // 选择文件触发激活样式 */
   border: 1px solid #409eff;
   border-radius: 8px;
-}
-.icon-file-selected {
-  position: absolute;
-  left: 5px;
-  top: 5px;
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-size: 100% 100%;
-  /* background-image: url(../../assets/svg/icon-file-selected.svg); */
-  opacity: 1;
-}
- .icon-file-selected{
-  /* // 激活状态小圆点透明度1 */
-  opacity: 1 !important;
 }
 .active:hover .loadding-message {
   /* // 加载loading的文字样式 */

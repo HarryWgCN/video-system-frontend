@@ -12,109 +12,84 @@ export default {
     return {
       myChart: null,
       chartData: [],
+      overallChartLink: {},
+      secondToSituationDict: {},
       chartLink: [],
-      videoSeconds: 300,
       loading: true
     }
   },
   props: {
-    videoName: {
-      type: String,
+    processId: {
+      type: Number,
       required: true // 缺失，控制台报错
+    },
+    videoSeconds: {
+      type: Number,
+      required: true
     }
   },
   watch: {
-    videoName: function () {
-      console.log('videoName changed')
-      this.forMounted()
+    processId: function () {
+      console.log('processId changed')
+      this.getClusterAndOverallRelations()
+    },
+    videoSeconds: function () {
+      this.updateRelations()
     }
   },
   mounted: function () {
-    this.forMounted()
+    this.getClusterAndOverallRelations()
   },
   methods: {
-    forMounted: function () {
+    getClusterAndOverallRelations: function () {
       var this_ = this
       this_.loading = true
       this.chartData = []
       this.chartLink = []
-      this_.$axios.get('/ls', {
-        params: {
-          dirPath: '/2020110710/video_system/' + this_.videoName + '/process_results/process/for_frontend/face_cluster'
+      this_.$axios.get('/video/' + this_.processId + '/face_cluster', {responseType: 'json'}).then(function (response) {
+        if (response.data.code === '404') {
+          return
         }
-      }).then(function (response) {
-        let asyncFun = []
-        var facesArray = response.data.data
-        console.log(facesArray)
-        for (var i = 0; i < facesArray.length; i++) {
-          var element = facesArray[i]
-          asyncFun.push(this_.getSingleFace(element))
+        for (var element of response.data.data) {
+          var id = element.name.split('.')[0]
+          var img = 'data:image/jpg;base64,' + element.content
+          this_.chartData.push({symbolSize: 76, symbol: `image://${img}`, id: id})
         }
-        var index = 0
-        Promise.all(asyncFun).then(() => {
-          this_.$axios.get('/file', {
-            params: {
-              filePath: '/2020110710/video_system/' + this_.videoName + '/process_results/process/relation/second_to_situation.json'
-            }
-          }).then(function (response) {
-            // video seconds corresponding link number
-            var secondToSituation = response.data
-            var keyArray = []
-            function func (a, b) {
-              return a - b
-            }
-            for (let key in secondToSituation) {
-              keyArray.push(key)
-            }
-            keyArray = keyArray.sort(func)
-            for (var i = 0; i < keyArray.length; i++) {
-              if (keyArray[i] > this_.videoSeconds) {
-                index = i === 0 ? 0 : i - 1
-                break
-              }
-            }
-            index = keyArray.length - 1
-            // get corresponding link.json
-            this_.$axios.get('/file', {
-              params: {
-                filePath: '/2020110710/video_system/' + this_.videoName + '/process_results/process/relation/link' + secondToSituation[keyArray[index]] + '.json'
-              }
-            }).then(function (response) {
-              this_.chartLink = response.data
-              this_.initEchart()
-              this_.loading = false
-            }).catch(function (error) {
-              console.log(error)
-            })
-          }).catch(function (error) {
-            console.log(error)
-          })
+        this_.$axios.get('/video/' + this_.processId + '/relation', {responseType: 'json'}).then(function (response) {
+          this_.overallChartLink = response.data.data.relationMap
+          this_.secondToSituationDict = response.data.data.sec2situationMessage
+          this_.updateRelations()
+        }).catch(function (error) {
+          console.log(error)
         })
       }).catch(function (error) {
         console.log(error)
       })
     },
-    getSingleFace: function (element) {
-      var this_ = this
-      return new Promise((resolve, reject) => {
-        this_.$axios.get('/file', {
-          params: {
-            filePath: '/2020110710/video_system/' + this_.videoName + '/process_results/process/for_frontend/face_cluster/' + element.name
-          },
-          responseType: 'arraybuffer'
-        }).then(function (response) {
-          var imageName = response.config.params.filePath.split('/')[response.config.params.filePath.split('/').length - 1]
-          var id = imageName.split('.')[0]
-          var image = 'data:image/jpg;base64,' + btoa(new Uint8Array(response.data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
-          this_.chartData.push({symbolSize: 76, symbol: `image://${image}`, id: id})
-          resolve()
-        }).catch(function (error) {
-          console.log(error)
-        })
-      })
-    },
-    refresh: function () {
+    updateRelations: function () {
+      this.loading = true
+      var index = this.getCorrespondingRelationIndex(this.videoSeconds)
+      console.log(index)
+      this.chartLink = this.overallChartLink[index]
+      console.log(this.chartLink)
       this.initEchart()
+      this.loading = false
+    },
+    getCorrespondingRelationIndex: function (videoSeconds) {
+      var keyArray = []
+      function func (a, b) {
+        return a - b
+      }
+      for (let key in this.overallChartLink) {
+        keyArray.push(key)
+      }
+      keyArray = keyArray.sort(func)
+      for (var i = 0; i < keyArray.length; i++) {
+        if (keyArray[i] > videoSeconds) {
+          return i === 0 ? 0 : i - 1
+        }
+      }
+      return keyArray.length - 1
     },
     initEchart () {
       let dom = document.getElementById('container')

@@ -13,17 +13,19 @@
       <el-menu-item index="/description">视频信息</el-menu-item>
       <el-submenu index="2">
         <template slot="title">视频处理信息</template>
-        <el-menu-item index="/frames">视频内容</el-menu-item>
-        <el-menu-item index="/personclusters">视频人物</el-menu-item>
-        <el-menu-item index="/personfeatures">人物特征</el-menu-item>
+        <el-menu-item index="/frames">分镜抽帧</el-menu-item>
+        <el-menu-item index="/objdetection">物体识别</el-menu-item>
+        <el-menu-item index="/facecluster">人脸聚类</el-menu-item>
       </el-submenu>
+      <el-menu-item index="/personclusters">视频人物</el-menu-item>
+      <el-menu-item index="/personfeatures">人物特征</el-menu-item>
       <el-menu-item index="/relations" >人物关系网络</el-menu-item>
       <el-menu-item index="4">
         <a href="https://www.bupt.edu.cn/" target="_blank" style='text-decoration:none;'>关于我们</a>
       </el-menu-item>
     </el-menu>
     <el-main class='navmenu_content'>
-      <router-view v-bind:videoName='videoNameData'></router-view>
+      <router-view v-bind:processId='processId' v-bind:videoSeconds='videoSeconds'></router-view>
     </el-main>
   </div>
 </template>
@@ -37,9 +39,13 @@ export default {
     }
   },
   props: {
-    videoNameData: {
-      type: String,
+    processId: {
+      type: Number,
       required: true // 缺失，控制台报错
+    },
+    videoSeconds: {
+      type: Number,
+      required: true
     }
   },
   methods: {
