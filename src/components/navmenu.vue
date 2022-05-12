@@ -25,7 +25,7 @@
       </el-menu-item>
     </el-menu>
     <el-main class='navmenu_content'>
-      <router-view v-bind:processId='processId' v-bind:videoSeconds='videoSeconds'></router-view>
+      <router-view :processId='processId' :videoSeconds='videoSeconds'></router-view>
     </el-main>
   </div>
 </template>

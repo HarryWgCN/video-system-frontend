@@ -8,7 +8,9 @@
           :class="(index === now_path.length-1) ? 'breadcrumb-link-active': ''"
           class="breadcrumb-link"
           @click="backFileFolder(index)"
-        >{{subPath}}</span>
+        >
+          {{subPath}}
+        </span>
       </el-breadcrumb-item>
     </el-breadcrumb>
   </div>
@@ -39,11 +41,16 @@
         </li>
       </ul>
     </div>
-    <div v-else>
-      <img :src="src" alt=""/>
+    <div v-else id="file">
+      <el-carousel trigger="click">
+        <el-carousel-item v-for="(src, index) in srcs" :key="index" :label="src.fileName">
+          <el-image
+            :src="src.src" 
+            ></el-image>
+        </el-carousel-item>
+      </el-carousel>
     </div>
   </div>
-  <!-- <el-button id='back_button' type="primary" round v-on:click='pressButton(former_path, true)'>返回上层</el-button> -->
 </div>
 </template>
 
@@ -51,10 +58,9 @@
 export default {
   data: function () {
     return {
-      elements: [
-      ], // 目录结构
+      elements: [], // 目录结构
       show_dir: true, // 是否显示目录结构，false展示文件
-      src: null, // 文件连接
+      srcs: [],
       now_path: ['frames'],
       clip: '', // 当前的路径
       loading: true,
@@ -78,20 +84,24 @@ export default {
   },
   methods: {
     forMounted: function () {
-      var this_ = this
-      this.$axios.get('/video/' + this_.processId + '/ls/clip', {
-        params: {
-          pageSize: this_.pageSize,
-          page: 0,
-          clip: ''
-        }
-      }).then(function (response) {
-        this_.elements = response.data.data.data
-        this_.show_dir = true
-        this_.loading = false
-      }).catch(function (error) {
-        console.log(error)
-      })
+      const url = `/video/${this.processId}/ls/clip`
+      const params = {
+        pageSize: this.pageSize,
+        page: 0,
+        clip: ''
+      }
+      this.$axios.get(url, { params: params })
+        .then((response) => {
+          this.elements = response.data.data.data
+          this.show_dir = true
+          this.loading = false
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+        .finally(() => {
+          this.now_path = ['frames']
+        })
     },
     getClass: function (value) { // 获取文件夹、文件对应css class
       return value.dir ? 'icon-folder' : 'icon-file'
@@ -103,8 +113,8 @@ export default {
           this.forMounted()
           break
         case 1:
-          var name = this.now_path[index]
-          this.now_path = this.now_path.slice(0, 1)
+          const name = this.now_path[index]
+          this.now_path = this.now_path.slice(0, 2)
           this.pressButton({name: name, dir: true})
           break
         default :
@@ -112,30 +122,43 @@ export default {
       }
     },
     pressButton: function (file) { // 点击按钮请求新的目录结构或请求文件
-      var name = file.name
-      var isDir = file.dir
-      this.now_path.push(name)
-      var this_ = this
+      const name = file.name
+      const isDir = file.dir
+
+      if (name.indexOf('.') === -1 && name !== this.now_path[this.now_path.length - 1]) {
+        this.now_path.push(name)
+      }
+
       if (isDir) {
-        this_.loading = true
-        this_.$axios.get('/video/' + this_.processId + '/ls/clip', {
-          params: {
-            pageSize: this_.pageSize,
-            page: 0,
-            clip: name
-          }
-        }).then(function (response) {
-          this_.elements = response.data.data.data
-          this_.show_dir = true
-          this_.loading = false
-        }).catch(function (error) {
-          console.log(error)
-        })
+        this.loading = true
+        const url = `/video/${this.processId}/ls/clip`
+        const params = {
+          pageSize: this.pageSize,
+          page: 0,
+          clip: name
+        }
+        this.$axios.get(url, { params: params })
+          .then((response) => {
+            const fileData = response.data.data.data
+            this.elements = fileData
+            this.show_dir = true
+            this.loading = false
+            const pictures = []
+            fileData.forEach(item => {
+              const src = 'data:image/jpg;base64,' + item.content
+              const fileName = item.name
+              pictures.push({
+                src: src,
+                fileName: fileName
+              })
+              this.srcs = pictures
+            })
+          })
+          .catch((error) => {
+            console.log(error)
+          })
       } else {
-        this_.loading = true
-        this_.src = 'data:image/jpg;base64,' + file.content
-        this_.show_dir = false
-        this_.loading = false
+        this.show_dir = false
       }
     }
   }
@@ -148,14 +171,14 @@ export default {
   flex-wrap: wrap;
   height: 500px;
 }
+#file {
+  height: 100%;
+  width: 100%;
+}
 .element{
   margin-right: 50px;
   margin-bottom: 30px;
   font-size: 20px;
-  overflow: scroll;
-}
-img{
-  width: 400px;
   overflow: scroll;
 }
 #back_button{
@@ -265,5 +288,16 @@ img{
   color: #424e67;
   font-size: 12px;
   text-align: center;
+}
+.el-carousel {
+  width: 100%;
+  height: 100%;
+}
+.el-carousel .el-carousel__container {
+  height: 100%;
+}
+.el-carousel .el-image {
+  height: 100%;
+  object-fit: contain;
 }
 </style>
