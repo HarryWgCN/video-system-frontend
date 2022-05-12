@@ -50,6 +50,7 @@ export default {
       ).then(function (response) {
         if (response.data.code === '200') {
           this_.$message('任务提交成功')
+          // TODO: message emit to DropDown to be added
         }
       }).catch(function (error) {
         console.log(error)

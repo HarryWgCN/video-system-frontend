@@ -35,16 +35,20 @@ export default {
 
     confirmUpload () { // 确认上传
       var param = new FormData()
+      var this_ = this
       this.fileList.forEach(
         (val, index) => {
           param.append('file', val.raw)
         }
       )
       console.log(param.getAll('file'))
-      this.$axios.post('/file?dirPath=/2020110710/video_system/videos', param).then(responce => {})
-      this.$message({
-        message: '上传成功！',
-        duration: 1000
+      this.$axios.post('/file?dirPath=/2020110710/video_system/videos', param).then(responce => {
+        this_.$message({
+          message: '上传成功！',
+          duration: 2000
+        })
+        this_.fileList = []
+        // TODO: message emit to SubmitProcess to be added
       })
     }
   }
