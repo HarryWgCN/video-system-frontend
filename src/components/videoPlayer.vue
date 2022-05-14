@@ -2,6 +2,16 @@
   <div class="my_video">
     <el-row>
       <DropDown @process-change-event='processChange'></DropDown>
+    </el-row>
+    <el-row>
+      <div class="style1">
+        <span style="font-size:17px;width:200px;margin-right: 30px">
+          <p>{{introduction1}}</p>
+          <p>{{introduction2}}</p>
+        </span>
+      </div>
+    </el-row>
+    <el-row>
       <video-player  class="video-player vjs-custom-skin"
                     ref="videoPlayer"
                     :playsinline="true"
@@ -49,7 +59,9 @@ export default {
       selectProcess: 'yeqiudi', // 具体视频
       fileType: 'mp4', // 资源的类型
       videoUrl: '', // 资源的路径地址
-      posterUrl: '' // 封面地址
+      posterUrl: '', // 封面地址
+      introduction1: '基于视频的社交关系网络构建致力于解决人们对于视频中人物社交关系信息抽取的需求，主流影评网站对于视频会给出人物关系图谱帮助用户理解影视作品中复杂的人物关系，影视解说频道会在讲解剧情的同时辅以人物关系图表进行讲解，同时公安侦查、情报分析中也会对大量的视频线索进行信息抽取分析，视图将其中隐含的社交关系挖掘出来，本系统中视频人物社交关系网络构建与分析对各领域的需求提供一站式、易于操作的网络服务。',
+      introduction2: '本平台左侧可以进行任务选择、视频预览、视频上传、任务提交，右侧进行各种处理结果的展示，包括视频信息（原视频的静态属性）、视频处理信息（分镜抽帧结果、目标检测结果、人脸聚类结果）、视频人物（人物图片）、人物特征（人脸特征可视化）、人物关系网络'
     }
   },
   mounted () {
@@ -150,6 +162,15 @@ export default {
 }
 </script>
 <style scoped lang="less">
+  .style1{
+    background-color: rgb(231, 197, 136);
+    text-align:left;
+    text-indent: 2em;
+    margin-top: 10px;
+    height: 180px;
+    margin-bottom: 0px;
+    padding-top: 10px;
+  }
   .my_video {
     width: 100%;
     height: calc(100vh);
@@ -165,20 +186,20 @@ export default {
   }
   #uploader{
     margin-left: 40px;
-    margin-top: 50px;
+    margin-top: 10px;
     padding: 20px;
     width: 400px;
-    height: 380px;
+    // height: 380px;
     border-radius: 4px;
     background-color: white;
     box-shadow: 10px 10px 5px #888888;
   }
   #submit_process {
     margin-left: 60px;
-    height: 380px;
+    // height: 380px;
     background-color: white;
-    margin-top: 50px;
-    padding: 20px;
+    margin-top: 10px;
+    padding: 5px;
     width: 400px;
     border-radius: 4px;
     box-shadow: 10px 10px 5px #888888;

@@ -1,6 +1,6 @@
 <template>
   <div id='sub_submit_process'>
-    <el-row :span="10" class="lightgreen-box dropdown">
+    <el-row :span="10" class="lightgreen-box dropdown_">
       <el-dropdown @command="handleCommand" size="medium">
         <span class="el-dropdown-link">
           {{selectVideo.name}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -65,23 +65,23 @@ export default {
 <style>
   .el-dropdown-link {
     cursor: pointer;
+    margin-top: 0px;
     color: #409EFF;
   }
   .el-icon-arrow-down {
     font-size: 12px;
   }
   #drop_down {
-    margin-top: 20px;
-    margin-bottom: 42.9px;
+    margin-top: 5px;
   }
   .submit_button {
-    margin-top: 30px;
+    margin-top: 5px;
   }
   .input {
-    margin-top: 40px;
-    margin-bottom: 50px;
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
   #sub_submit_process {
-    margin-top: 30px;
+    margin-top: 0px;
   }
 </style>

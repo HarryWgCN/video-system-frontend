@@ -20,7 +20,7 @@
       <el-menu-item index="/personclusters">视频人物</el-menu-item>
       <el-menu-item index="/personfeatures">人物特征</el-menu-item>
       <el-menu-item index="/relations" >人物关系网络</el-menu-item>
-      <el-menu-item index="4">
+      <el-menu-item index="/aboutus">
         <a href="https://www.bupt.edu.cn/" target="_blank" style='text-decoration:none;'>关于我们</a>
       </el-menu-item>
     </el-menu>
