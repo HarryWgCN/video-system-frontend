@@ -1,27 +1,34 @@
 <template>
   <div class="my_video">
-    <DropDown @process-change-event='processChange'></DropDown>
-    <video-player  class="video-player vjs-custom-skin"
-                   ref="videoPlayer"
-                   :playsinline="true"
-                   :options="videoPlayerOptions"
-                   @play="onPlayerPlay($event)"
-                   @pause="onPlayerPause($event)"
-                   @ended="onPlayerEnded($event)"
-                   @waiting="onPlayerWaiting($event)"
-                   @playing="onPlayerPlaying($event)"
-                   @loadeddata="onPlayerLoadeddata($event)"
-                   @timeupdate="onPlayerTimeupdate($event)"
-                   @canplay="onPlayerCanplay($event)"
-                   @canplaythrough="onPlayerCanplaythrough($event)"
-                   @statechanged="playerStateChanged($event)"
-                   @ready="playerReadied"
-    ></video-player>
-    <div id='uploader'>
-    <Uploader></Uploader>
-    </div>
-    <div id='submit_process'>
-      <SubmitProcess></SubmitProcess>
+    <el-row>
+      <DropDown @process-change-event='processChange'></DropDown>
+      <video-player  class="video-player vjs-custom-skin"
+                    ref="videoPlayer"
+                    :playsinline="true"
+                    :options="videoPlayerOptions"
+                    @play="onPlayerPlay($event)"
+                    @pause="onPlayerPause($event)"
+                    @ended="onPlayerEnded($event)"
+                    @waiting="onPlayerWaiting($event)"
+                    @playing="onPlayerPlaying($event)"
+                    @loadeddata="onPlayerLoadeddata($event)"
+                    @timeupdate="onPlayerTimeupdate($event)"
+                    @canplay="onPlayerCanplay($event)"
+                    @canplaythrough="onPlayerCanplaythrough($event)"
+                    @statechanged="playerStateChanged($event)"
+                    @ready="playerReadied"
+      ></video-player>
+    </el-row>
+    <div>
+      <el-col :span="12" id='uploader'>
+      <Uploader></Uploader>
+      </el-col>
+      <el-col :span="12" id='submit_process'>
+        <el-row>
+          <h1 class='word'>提交视频处理任务</h1>
+        </el-row>
+        <SubmitProcess></SubmitProcess>
+      </el-col>
     </div>
   </div>
 </template>
@@ -143,10 +150,12 @@ export default {
 }
 </script>
 <style scoped lang="less">
-  .my_video{
+  .my_video {
     width: 100%;
     height: calc(100vh);
-    background-color: white;
+  }
+  .video-player {
+    margin-top: 20px;
   }
   .video-js .vjs-big-play-button{
     /*对播放按钮的样式进行设置*/
@@ -155,7 +164,24 @@ export default {
     border-radius: 50%;
   }
   #uploader{
-    margin-top: 20px;
+    margin-left: 40px;
+    margin-top: 50px;
+    padding: 20px;
+    width: 400px;
+    height: 380px;
+    border-radius: 4px;
+    background-color: white;
+    box-shadow: 10px 10px 5px #888888;
+  }
+  #submit_process {
+    margin-left: 60px;
+    height: 380px;
+    background-color: white;
+    margin-top: 50px;
+    padding: 20px;
+    width: 400px;
+    border-radius: 4px;
+    box-shadow: 10px 10px 5px #888888;
   }
   .el-dropdown-link {
     cursor: pointer;
@@ -170,7 +196,5 @@ export default {
     font-size: 14px;
     margin-bottom: 20px;
   }
-  #submit_process {
-    margin-top: 40px;
-  }
+
 </style>

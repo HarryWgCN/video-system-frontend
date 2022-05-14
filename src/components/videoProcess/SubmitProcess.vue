@@ -1,21 +1,23 @@
 <template>
-  <div>
-    <el-col :span="10" class="lightgreen-box">
-      <el-dropdown @command="handleCommand" size="medium" split-button type="primary">
-        {{selectVideo.name}}
-        <el-dropdown-menu slot="dropdown">
+  <div id='sub_submit_process'>
+    <el-row :span="10" class="lightgreen-box dropdown">
+      <el-dropdown @command="handleCommand" size="medium">
+        <span class="el-dropdown-link">
+          {{selectVideo.name}}<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu  slot="dropdown">
           <el-dropdown-item v-for="(video) in videoList" :key="video.name" :command="video">
             {{video.name}}
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-    </el-col>
-    <el-col :span="6" class="lightgreen-box">
+    </el-row>
+    <el-row :span="6" class="lightgreen-box input">
       <el-input v-model="processNameInput" placeholder="请输入自定义任务名"></el-input>
-    </el-col>
-    <el-col :span="8" class="lightgreen-box">
-      <el-button type="primary" @click='submitProcess'>提交任务</el-button>
-    </el-col>
+    </el-row>
+    <el-row :span="8" class="lightgreen-box submit_button">
+      <el-button type="primary" @click='submitProcess' round>提交任务</el-button>
+    </el-row>
   </div>
 </template>
 
@@ -24,7 +26,7 @@ export default {
   data: function () {
     return {
       videoList: [],
-      selectVideo: {name: '选择视频'},
+      selectVideo: {name: '选择已上传视频'},
       processNameInput: ''
     }
   },
@@ -69,6 +71,17 @@ export default {
     font-size: 12px;
   }
   #drop_down {
+    margin-top: 20px;
     margin-bottom: 42.9px;
+  }
+  .submit_button {
+    margin-top: 30px;
+  }
+  .input {
+    margin-top: 40px;
+    margin-bottom: 50px;
+  }
+  #sub_submit_process {
+    margin-top: 30px;
   }
 </style>

@@ -12,9 +12,7 @@
 export default {
   data () {
     return {
-      srcs: [
-
-      ],
+      srcs: [],
       loading: true
     }
   },
@@ -56,6 +54,10 @@ export default {
 </script>
 
 <style>
+  .block {
+    height: 100%;
+    width: 100%;
+  }
   .el-carousel__item h3 {
     color: #475669;
     font-size: 14px;
@@ -69,5 +71,8 @@ export default {
   }
   .el-carousel__item:nth-child(2n+1) {
      background-color: #d3dce6;
+  }
+  .el-carousel__container {
+  height: 600px
   }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="echartLayout" v-loading='loading'>
-    <div id="container" style="width:100%; height:300%; overflow:hidden;"></div>
+    <div id="container" style="width:100%; height:500px; overflow:hidden;"></div>
     <!-- <button v-on:click='refresh()'>refresh</button> -->
   </div>
 </template>
@@ -147,7 +147,12 @@ export default {
   }
 }
 </script>
-
+  .echartLayout {
+    height: 600px
+  }
+  .el-carousel__container {
+    height: 600px
+  }
 <style scoped>
 
 </style>

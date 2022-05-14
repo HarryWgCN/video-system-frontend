@@ -44,7 +44,12 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  background-color: rgba(188, 225, 246, 0.799);
+  /* background-color: #257bd2; */
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 0px;
+}
+html,body,#app{
+  height: 100%;
 }
 </style>
