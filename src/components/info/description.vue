@@ -6,7 +6,7 @@
     <el-descriptions-item label="格式">
       <el-tag size="small">{{format}}</el-tag>
     </el-descriptions-item>
-    <el-descriptions-item label="文件大小">{{size}}Mb</el-descriptions-item>
+    <el-descriptions-item label="文件大小">{{size}}MB</el-descriptions-item>
   </el-descriptions>
 </template>
 
@@ -15,12 +15,12 @@ export default {
   name: 'Description',
   data: function () {
     return {
-      name: 'Legal_High',
-      duration: '30',
+      name: '球场七侠',
+      duration: '158',
       format: 'mp4',
-      width: '800',
-      height: '600',
-      size: '1280'
+      width: '1920',
+      height: '1080',
+      size: '44.2'
     }
   }
 }
