@@ -45,7 +45,7 @@
       <el-carousel trigger="click">
         <el-carousel-item v-for="(src, index) in srcs" :key="index" :label="src.fileName">
           <el-image
-            :src="src.src" 
+            :src="src.src"
             ></el-image>
         </el-carousel-item>
       </el-carousel>

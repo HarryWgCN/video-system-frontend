@@ -1,12 +1,12 @@
 <template>
-  <el-descriptions>
-    <el-descriptions-item label="视频名称">{{name}}</el-descriptions-item>
-    <el-descriptions-item label="时长">{{duration}}s</el-descriptions-item>
-    <el-descriptions-item label="帧尺寸">宽: {{width}}px 高: {{height}}px</el-descriptions-item>
-    <el-descriptions-item label="格式">
-      <el-tag size="small">{{format}}</el-tag>
+  <el-descriptions class='des_word' :column="1">
+    <el-descriptions-item  label="视频名称" >{{name}}</el-descriptions-item>
+    <el-descriptions-item  label="时长">{{duration}}s</el-descriptions-item>
+    <el-descriptions-item  label="帧尺寸">宽: {{width}}px 高: {{height}}px</el-descriptions-item>
+    <el-descriptions-item  label="格式">
+      <el-tag size="big">{{format}}</el-tag>
     </el-descriptions-item>
-    <el-descriptions-item label="文件大小">{{size}}Mb</el-descriptions-item>
+    <el-descriptions-item  label="文件大小">{{size}}Mb</el-descriptions-item>
   </el-descriptions>
 </template>
 
@@ -35,18 +35,19 @@ export default {
       this.forMounted()
     }
   },
-  mounted() {
+  mounted () {
     this.forMounted()
   },
   methods: {
-    forMounted() {
+    forMounted () {
       const url = `http://10.112.207.79:8100/vs-portal/video-process/${this.processId}`
       this.$axios.get(url)
         .then((response) => {
           const data = response.data.data
           const videoPath = data.videoPath.split('/')
-          const video = videoPath[videoPath.length - 1].split('.');
-          const videoName = video[0], format = video[1]
+          const video = videoPath[videoPath.length - 1].split('.')
+          const videoName = video[0]
+          const format = video[1]
           this.name = videoName
           this.duration = data.videoDuration
           this.format = format
@@ -60,4 +61,9 @@ export default {
 </script>
 
 <style>
+.des_word{
+  font-size: 20px;
+  margin-top: 160px;
+  margin-left: 260px;
+}
 </style>

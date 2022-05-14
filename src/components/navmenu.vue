@@ -74,6 +74,15 @@ a {
   color: #42b983;
 }
 .navmenu_content{
-  height: 700px
+  height: 650px;
+  width: 95%;
+  margin-left: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 10px 10px 5px #888888;
+}
+.el-menu{
+  border-bottom: 0px;
 }
 </style>

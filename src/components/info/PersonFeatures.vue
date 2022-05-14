@@ -69,4 +69,10 @@ export default {
   .el-carousel__item:nth-child(2n+1) {
      background-color: #d3dce6;
   }
+  .el-carousel__container {
+    height: 600px
+  }
+  .el-image {
+    height: 100%
+  }
 </style>

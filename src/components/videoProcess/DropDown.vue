@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-dropdown @command="handleCommand" id='drop_down'>
+  <div id='dropdown_box'>
+    <el-dropdown @command="handleCommand" id='drop_down_'>
       <span class="el-dropdown-link">
         {{selectProcess.name}} - {{translateState(selectProcess)}}<i class="el-icon-arrow-down el-icon--right"></i>
       </span>
@@ -65,11 +65,21 @@ export default {
   .el-dropdown-link {
     cursor: pointer;
     color: #409EFF;
+    margin-top: 30px;
   }
   .el-icon-arrow-down {
-    font-size: 12px;
+    font-size: 20px;
   }
-  #drop_down {
-    margin-bottom: 42.9px;
+  #drop_down_ {
+    margin-top: 5px;
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+    font-size: 20px;
+  }
+  #dropdown_box {
+    background-color: #545c64;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
   }
 </style>

@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div id='up_load_file'>
+    <h1 class='word'>上传待处理视频</h1>
     <el-upload class="upload-demo"
     action="#"
     drag
@@ -12,7 +13,7 @@
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
     </el-upload>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="confirmUpload()">上 传</el-button>
+      <el-button type="primary" @click="confirmUpload()" round>上 传</el-button>
     </div>
   </div>
 </template>
@@ -54,3 +55,12 @@ export default {
   }
 }
 </script>
+
+<style>
+.word {
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
+.dialog-footer {
+  margin-top: 20px;
+}
+</style>
