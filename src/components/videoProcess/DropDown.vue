@@ -29,7 +29,7 @@ export default {
       }
     }).then(function (response) {
       console.log(response)
-      this_.process_list = response.data.data
+      this_.process_list = response.data.data.splice(0, 10)
       this_.selectProcess = this_.process_list[0]
       this_.$emit('process-change-event', this_.selectProcess)
     }).catch(function (error) {
