@@ -167,7 +167,7 @@ export default {
     text-align:left;
     text-indent: 2em;
     margin-top: 10px;
-    height: 180px;
+    height: 200px;
     margin-bottom: 0px;
     padding-top: 10px;
   }
