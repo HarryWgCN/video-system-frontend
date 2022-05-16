@@ -132,7 +132,7 @@ export default {
             },
             // 头像
             // symbol:
-            symbolSize: 46,
+            symbolSize: 3,
             type: 'graph',
             links: this.chartLink,
             data: this.chartData
