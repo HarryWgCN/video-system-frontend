@@ -21,22 +21,37 @@ export default {
       selectProcess: ''
     }
   },
+  props: {
+    submitProcessSign: {
+      type: Number,
+      required: true // 缺失，控制台报错
+    }
+  },
   mounted: function () {
-    var this_ = this
-    this.$axios.get('http://10.112.207.79:8100/vs-portal/video-process/list', {
-      params: {
-        userId: '2020110710'
-      }
-    }).then(function (response) {
-      console.log(response)
-      this_.process_list = response.data.data.splice(0, 10)
-      this_.selectProcess = this_.process_list[0]
-      this_.$emit('process-change-event', this_.selectProcess)
-    }).catch(function (error) {
-      console.log(error)
-    })
+    this.forMounted()
+  },
+  watch: {
+    submitProcessSign: function () {
+      console.log('submitProcessSign changed')
+      this.forMounted()
+    }
   },
   methods: {
+    forMounted: function () {
+      var this_ = this
+      this.$axios.get('http://10.112.207.79:8100/vs-portal/video-process/list', {
+        params: {
+          userId: '2020110710'
+        }
+      }).then(function (response) {
+        console.log(response)
+        this_.process_list = response.data.data.splice(0, 10)
+        this_.selectProcess = this_.process_list[0]
+        this_.$emit('process-change-event', this_.selectProcess)
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
     handleCommand: function (command) {
       this.selectProcess = command
       this.$emit('process-change-event', this.selectProcess)

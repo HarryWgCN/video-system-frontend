@@ -1,7 +1,7 @@
 <template>
   <div class="my_video">
     <el-row>
-      <DropDown @process-change-event='processChange'></DropDown>
+      <DropDown v-bind:submitProcessSign='submitProcessSign' @process-change-event='processChange'></DropDown>
     </el-row>
     <el-row>
       <div class="style1">
@@ -36,11 +36,11 @@
       <el-col :span="12" id='uploader'>
       <Uploader></Uploader>
       </el-col>
-      <el-col :span="12" id='submit_process'>
+      <el-col :span="12" id='submit_process' >
         <el-row>
           <h1 class='word'>提交视频处理任务</h1>
         </el-row>
-        <SubmitProcess></SubmitProcess>
+        <SubmitProcess @process-submitted='processSubmitted'></SubmitProcess>
       </el-col>
     </div>
   </div>
@@ -69,7 +69,8 @@ export default {
       introduction1_en: "We attempt to fulfill the public's demand for extracting social relationships among video characters by constructing social relationship networks based on videos. Main-stream movie critic sites usually present character relationship graphs to help visitors understand underlying relations, while film and television narrating channels tend to use relationship diagrams to help plot narrating. In addition, the security departments and intelligence analysts make use of videos to extract valuable information, expecting to retrieve implicit social relationships. This platform provides one-stop, user-friendly online service for the above demands.",
       introduction2_en: 'In the left, you can select the tasks submitted before, preview the corresponding video, upload local video and submit your task. The process results are shown in the Right, including the primitive information, intermediate result(fragmentation, object detection, face clustering), characters, character feature visualization and the key result--character social relationship network.',
       introduction1: '',
-      introduction2: ''
+      introduction2: '',
+      submitProcessSign: 1
     }
   },
   mounted () {
@@ -77,6 +78,10 @@ export default {
     this.introduction2 = this.introduction2_zh
   },
   methods: {
+    processSubmitted: function () {
+      console.log('caught processSubmitted')
+      this.submitProcessSign = 1 - this.submitProcessSign
+    },
     switchLang: function () {
       if (this.language === '中文') {
         this.language = 'English'
