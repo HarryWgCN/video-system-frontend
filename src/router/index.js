@@ -7,7 +7,7 @@ import ObjDetection from '@/components/info/process_info/ObjDetection'
 import FaceCluster from '@/components/info/process_info/FaceCluster'
 import PersonClusters from '@/components/info/PersonClusters'
 import PersonFeatures from '@/components/info/PersonFeatures'
-import AboutUs from '@/components/info/aboutus'
+import AboutUs from '@/components/info/AboutUs'
 Vue.use(Router)
 
 export default new Router({

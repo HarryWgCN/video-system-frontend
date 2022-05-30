@@ -94,7 +94,6 @@ export default {
     initEchart () {
       let dom = document.getElementById('container')
       this.myChart = this.$echarts.init(dom)
-
       let option = {
         tooltip: {
           show: false
@@ -108,10 +107,10 @@ export default {
               }
             },
             edgeSymbol: 'circle',
-            force: {
-              repulsion: 2000
-            },
-            layout: 'force',
+            // force: {
+            //   repulsion: 1000
+            // },
+            layout: 'circular',
             roam: true,
             itemStyle: {
               normal: {
