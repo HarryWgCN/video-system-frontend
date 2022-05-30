@@ -53,7 +53,7 @@ export default {
         for (var element of response.data.data) {
           var id = element.name.split('.')[0]
           var img = 'data:image/jpg;base64,' + element.content
-          this_.chartData.push({symbolSize: 76, symbol: `image://${img}`, id: id})
+          this_.chartData.push({symbolSize: 26, symbol: `image://${img}`, id: id})
         }
         this_.$axios.get('/video/' + this_.processId + '/relation', {responseType: 'json'}).then(function (response) {
           this_.overallChartLink = response.data.data.relationMap

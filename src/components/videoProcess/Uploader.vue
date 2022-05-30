@@ -3,15 +3,16 @@
     <h1 class='word'>上传待处理视频</h1>
     <el-upload
       class="upload-demo"
-      action="https://jsonplaceholder.typicode.com/posts/"
+      action="http://10.112.207.79:8100/vs-filesystem/file?dirPath=/2020110710/video_system/videos"
       :on-preview="handlePreview"
       :on-remove="handleRemove"
       :before-remove="beforeRemove"
       multiple
       :limit="3"
       :on-exceed="handleExceed"
+      :on-change="handleChange"
       :file-list="fileList">
-      <el-button size="small" type="primary">点击上传</el-button>
+      <el-button size="small" type="primary"  @click="confirmUpload()">点击上传</el-button>
     </el-upload>
   </div>
 </template>
@@ -28,6 +29,18 @@ export default {
     }
   },
   methods: {
+    handleRemove (file, fileList) {
+      console.log(file, fileList)
+    },
+    handlePreview (file) {
+      console.log(file)
+    },
+    handleExceed (files, fileList) {
+      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+    },
+    beforeRemove (file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`)
+    },
     handleChange (file, fileList) { // 文件数量改变
       this.fileList = fileList
     },
